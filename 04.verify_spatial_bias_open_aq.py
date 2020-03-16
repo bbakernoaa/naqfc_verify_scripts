@@ -23,7 +23,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import numpy as np
-import monet
+import monet as m
+import monetio as mio
 from monet.util.tools import calc_8hr_rolling_max,calc_24hr_ave,get_relhum
 import dask.dataframe as dd
 
@@ -64,10 +65,10 @@ def make_spatial_bias_plot(df,
                            region='domain',
                            **kwargs):
     if region == 'domain':
-     ax = monet.plots.sp_scatter_bias(
+     ax = m.plots.sp_scatter_bias(
         df, col1=col1, col2=col2, map_kwargs=dict(states=False),val_max=vmax,val_min=vmin,**kwargs)
     else:
-     ax = monet.plots.sp_scatter_bias(
+     ax = m.plots.sp_scatter_bias(
         df, col1=col1, col2=col2, map_kwargs=dict(states=True),val_max=vmax,val_min=vmin,**kwargs)
 
     date = pd.Timestamp(date)
@@ -92,7 +93,7 @@ def make_spatial_bias_plot(df,
                                      initial_datetime.strftime('spbias'),
                                      dtstr)
     print(savename)
-    monet.plots.savefig(savename, bbox_inches='tight', dpi=100, decorate=True)
+    m.savefig(savename, bbox_inches='tight', dpi=100, decorate=True)
     plt.close()
 
 
