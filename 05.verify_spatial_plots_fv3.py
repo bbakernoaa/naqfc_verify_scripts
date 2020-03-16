@@ -51,8 +51,9 @@ def  make_8hr_regulatory(df,col=None):
 
 def map_projection(f):
     import cartopy.crs as ccrs
-    proj = ccrs.LambertConformal(
-        central_longitude=f.XCENT, central_latitude=f.YCENT)
+    proj = crs.PlateCarree(central_longitude=0)
+#     proj = ccrs.LambertConformal(
+#         central_longitude=f.XCENT, central_latitude=f.YCENT)
     return proj
 
 
@@ -62,9 +63,9 @@ def chdir(fname):
     return os.path.basename(fname)
 
 
-def open_cmaq(finput):
-    from monet.models import cmaq
-    f = cmaq.open_mfdataset(finput)
+def open_fv3chem(finput):
+    import monetio as mio
+    f = mio.fv3chem.open_mfdataset(finput)
     return f
 
 
@@ -178,7 +179,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '-e', '--epa_region', help='EPA Region Acronyms', type=str, required=False, default='domain')
     parser.add_argument(
-        '-n', '--output_name', help='Output base name',type=str, required=False, default='CMAQ_AIRNOW')
+        '-n', '--output_name', help='Output base name',type=str, required=False, default='FV3_OPENAQ_SFC_SPATIAL')
     parser.add_argument(
         '-sup', '--suppress_xwindow', help='Suppress X Window', action='store_true', required=False)
     parser.add_argument(
@@ -225,7 +226,7 @@ if __name__ == '__main__':
     
     df = load_paired_data(paired_data)
     mapping_table = {'OZONE':'O3', 'PM2.5':'PM25_TOT', 'PM10':'PMC_TOT', 'CO':'CO', 'NO':'NO', 'NO2':'NO2', 'SO2':'SO2','NOX':'NOX','NOY':'NOY','TEMP':'TEMP2','WS':'WSPD10','WD':'WDIR10',
-                     'SRAD':'GSW','BARPR':'PRSFC','PRECIP':'RT','RHUM':'Q2'}
+                     'SRAD':'GSW','BARPR':'PRSFC','PRECIP':'RT','RHUM':'Q2', 'PM2.5':'sfc_pm25','PM10':'sfc_pm10'}
     sub_map = {i: mapping_table[i] for i in species if i in mapping_table}
     
     if region is "domain":
