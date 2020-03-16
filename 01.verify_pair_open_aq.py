@@ -14,25 +14,26 @@ import subprocess
 from distutils.spawn import find_executable
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-import monet
+import monet as m
+import monetio as mio
 from monet.util.tools import long_to_wide
 import pandas as pd
 
 
 def pair_point(da, df, sub_map, interp):
     dfpair = da[sub_map].monet.combine_point(
-        df, method=interp, reuse_weights=True)
+        df, method=interp, reuse_weights=True, pyresample=False)
     return dfpair
 
 
 def get_open_aq(start, end, n_procs=None, datapath=None, verbose=False):
     dates = pd.date_range(start=start, end=end, freq='D')
-    dfopen_aq = monet.obs.openaq.add_data(dates,n_procs=n_procs)
+    dfopen_aq = mio.openaq.add_data(dates,n_procs=n_procs)
     return dfopen_aq.drop_duplicates(subset=['time', 'siteid'])
 
 
 def open_fv3chem(finput, verbose=False):
-    dset = monet.models.fv3chem.open_mfdataset(finput)
+    dset = mio.fv3chem.open_mfdataset(finput)
     return dset
 
 
